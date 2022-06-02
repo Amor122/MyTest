@@ -35,3 +35,11 @@ class HumanModelAdmin(admin.ModelAdmin):
     list_per_page = 10
     list_filter = ('organization',)
     search_fields = ('user_name',)
+
+
+@admin.register(models.HumanPost)
+class HumanPostModelAdmin(admin.ModelAdmin):
+    list_display = ('post_name', 'is_primary')
+    fields = ('post_name', 'is_primary')
+    list_per_page = 10
+    search_fields = ('post_name',)

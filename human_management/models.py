@@ -64,6 +64,18 @@ class Organization(HumanCommon):
         return self.organization_name
 
 
+class HumanPost(HumanCommon):
+    class Meta:
+        db_table = 'human_post'
+        verbose_name = verbose_name_plural = '职务信息'
+
+    post_name = models.CharField(max_length=20, unique=True, verbose_name='职位名称')
+    is_primary = models.BooleanField(verbose_name='是否主导所在组织',default=False)
+
+    def __str__(self):
+        return self.post_name
+
+
 class Human(HumanCommon):
     class Meta:
         db_table = 'human_beings'
@@ -75,6 +87,7 @@ class Human(HumanCommon):
     user_name = models.CharField(max_length=50, verbose_name='姓名')
     # 在输入上控制密码小于16位，保存其md5 De hash值作为密码
     password = models.CharField(max_length=128, verbose_name='密码', default='abc123456', blank=True)
+    post = models.ForeignKey(HumanPost, on_delete=models.SET_NULL, null=True, blank=True)
 
     def save(self, force_insert=False, force_update=False, using=None,
              update_fields=None):
