@@ -1,7 +1,6 @@
 import uuid
 from hashlib import md5
 from django.db import models
-from django.conf import settings
 
 
 class HumanCommon(models.Model):
