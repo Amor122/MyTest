@@ -69,7 +69,7 @@ class HumanPost(HumanCommon):
         verbose_name = verbose_name_plural = '职务信息'
 
     post_name = models.CharField(max_length=20, unique=True, verbose_name='职位名称')
-    is_primary = models.BooleanField(verbose_name='是否主导所在组织',default=False)
+    is_primary = models.BooleanField(verbose_name='是否主导所在组织', default=False)
 
     def __str__(self):
         return self.post_name
@@ -98,3 +98,6 @@ class Human(HumanCommon):
             self.password = m.hexdigest()
 
         super().save()
+
+    def __str__(self):
+        return f'{self.user_id}:{self.user_name}'

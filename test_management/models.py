@@ -58,6 +58,9 @@ class Test(HumanCommon):
     start_time = models.DateTimeField(verbose_name='开考时间')
     duration = models.IntegerField(verbose_name='考试时长', default=150)
 
+    def __str__(self):
+        return self.test_name
+
 
 class Invigilator(HumanCommon):
     class Meta:
@@ -97,4 +100,4 @@ class PaperAnswer(HumanCommon):
     examinee = models.ForeignKey(human_management.models.Human, on_delete=models.CASCADE, verbose_name='考生')
     paper_question = models.ForeignKey(PaperQuestion, on_delete=models.CASCADE, verbose_name='题目')
     my_answer = models.CharField(max_length=500, verbose_name='题目回答')
-    score_get = models.IntegerField(verbose_name='得分',null=True,blank=True)
+    score_get = models.IntegerField(verbose_name='得分', null=True, blank=True)
