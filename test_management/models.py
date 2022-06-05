@@ -19,6 +19,9 @@ class Question(HumanCommon):
     question_main = models.CharField(max_length=300, verbose_name='题干')
     question_answer = models.CharField(max_length=500, verbose_name='参考答案')
 
+    def __str__(self):
+        return self.question_main
+
 
 class Subject(HumanCommon):
     """科目，语文数学英语之类的"""
@@ -76,7 +79,7 @@ class Paper(HumanCommon):
 
     class Meta:
         db_table = 'papers'
-        verbose_name = verbose_name_plural = '试卷题目信息'
+        verbose_name = verbose_name_plural = '试卷'
 
     test = models.ForeignKey(Test, on_delete=models.CASCADE, verbose_name='所属考试')
 
@@ -95,7 +98,7 @@ class PaperQuestion(HumanCommon):
 class PaperAnswer(HumanCommon):
     class Meta:
         db_table = 'paper_answers'
-        verbose_name = verbose_name_plural = '试卷题目信息'
+        verbose_name = verbose_name_plural = '试卷题目回答'
 
     examinee = models.ForeignKey(human_management.models.Human, on_delete=models.CASCADE, verbose_name='考生')
     paper_question = models.ForeignKey(PaperQuestion, on_delete=models.CASCADE, verbose_name='题目')

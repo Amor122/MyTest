@@ -1,6 +1,7 @@
 from django.contrib import admin
 
 from . import models
+from django import forms
 
 
 @admin.register(models.Subject)
@@ -9,6 +10,25 @@ class SubjectModelAdmin(admin.ModelAdmin):
     fields = ('subject_name',)
     list_per_page = 10
     search_fields = ('subject_name',)
+
+
+class QuestionModelForm(forms.ModelForm):
+    question_main = forms.CharField(widget=forms.Textarea, label="题干", required=True)
+    question_answer = forms.CharField(widget=forms.Textarea, label="参考答案", required=True)
+
+    class Meta:
+        model = models.Question
+        fields = '__all__'
+
+
+@admin.register(models.Question)
+class QuestionModelAdmin(admin.ModelAdmin):
+    form = QuestionModelForm
+    list_display = ('subject', 'difficulty', 'question_type',
+                    'knowledge_node',)
+    fields = ('subject', 'difficulty', 'question_type',
+              'knowledge_node', 'question_main', 'question_answer')
+    list_per_page = 10
 
 
 @admin.register(models.Difficulty)
@@ -29,8 +49,8 @@ class TestModelAdmin(admin.ModelAdmin):
 
 @admin.register(models.Invigilator)
 class InvigilatorModelAdmin(admin.ModelAdmin):
-    list_display = ('test', 'test')
-    fields = ('test', 'test')
+    list_display = ('test', 'invigilator')
+    fields = ('test', 'invigilator')
     list_per_page = 10
 
 
