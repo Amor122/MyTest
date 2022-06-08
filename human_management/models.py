@@ -1,6 +1,6 @@
 import uuid
-from hashlib import md5
 from django.db import models
+from django.contrib.auth.hashers import make_password
 
 
 class HumanCommon(models.Model):
@@ -86,17 +86,12 @@ class Human(HumanCommon):
     user_name = models.CharField(max_length=50, verbose_name='姓名')
     # 在输入上控制密码小于16位，保存其md5 De hash值作为密码
     password = models.CharField(max_length=128, verbose_name='密码', default='abc123456', blank=True)
-    post = models.ForeignKey(HumanPost, on_delete=models.SET_NULL, null=True, blank=True)
+    post = models.ForeignKey(HumanPost, on_delete=models.SET_NULL, null=True, blank=True, verbose_name='职务')
 
     def save(self, force_insert=False, force_update=False, using=None,
              update_fields=None):
-        if len(self.password) <= 16:
-            m = md5()
-            # 加盐
-            m.update('dia_du09ye900~)#!U#)!h'.encode('utf8'))
-            m.update(self.password.encode('utf8'))
-            self.password = m.hexdigest()
-
+        if self.password and len(self.password) < 50:
+            self.password = make_password(self.password)
         super().save()
 
     def __str__(self):

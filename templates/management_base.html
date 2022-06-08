@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+{% load static %}
+<html lang="zh">
+<head>
+    {% block metas %}
+        {#            定时器、跳转之类的放这里#}
+    {% endblock %}
+
+    <meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no"/>
+    <meta name="description" content="一个简单的登录框架"/>
+    <meta name="author" content="你的名字"/>
+
+    <title>{% block title %}基础模板页面{% endblock %}</title>
+    <link rel='stylesheet' href='/static/bootstrap_table/bootstrap-table.css'>
+    <link rel='stylesheet' href='/static/css/bootstrap.css'>
+    <link rel="stylesheet" href="{% static 'css/bootstrap-theme.min.css' %}">
+    <link href="{% static 'css/styles.css' %}" rel="stylesheet"/>
+    {% block css %}
+
+
+    {% endblock %}
+</head>
+<body>
+<div class="d-flex" id="wrapper">
+    <!-- Sidebar-->
+    <div class="border-end bg-white" id="sidebar-wrapper">
+        <div class="sidebar-heading border-bottom bg-light" style="text-align: center">教学考试管理系统</div>
+        <div class="list-group list-group-flush">
+            <a class="list-group-item list-group-item-action list-group-item-light p-3" href="#!"
+               style="text-align: center">组织管理</a>
+            <a class="list-group-item list-group-item-action list-group-item-light p-3" href="/test_management/show_human"
+               style="text-align: center">人员管理</a>
+            <a class="list-group-item list-group-item-action list-group-item-light p-3" href="#!"
+               style="text-align: center">考试安排</a>
+            <a class="list-group-item list-group-item-action list-group-item-light p-3" href="#!"
+               style="text-align: center">试卷组装</a>
+            <a class="list-group-item list-group-item-action list-group-item-light p-3" href="#!"
+               style="text-align: center">题库管理</a>
+            <a class="list-group-item list-group-item-action list-group-item-light p-3" href="#!"
+               style="text-align: center">成绩查看</a>
+        </div>
+    </div>
+    <!-- Page content wrapper-->
+    <div id="page-content-wrapper">
+        <!-- Top navigation-->
+        <nav class="navbar navbar-expand-lg navbar-light bg-light border-bottom">
+            <div class="container-fluid">
+                <button class="btn btn-primary" id="sidebarToggle">切换菜单</button>
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
+                        data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent"
+                        aria-expanded="false" aria-label="Toggle navigation"><span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                    <ul class="navbar-nav ms-auto mt-2 mt-lg-0">
+                        <li class="nav-item active"><a class="nav-link" href="/">主页</a></li>
+                        <li class="nav-item"><a class="nav-link" href="/admin">管理员登录</a></li>
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle" id="navbarDropdown" href="#" role="button"
+                               data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">下拉</a>
+                            <div class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
+                                <div class="dropdown-divider"></div>
+                                <a class="dropdown-item"
+                                   href="{% url 'human_management:management_login' %}">登录者：{{ request.session.login_user.user_name|default:"未登录" }}</a>
+                                {% if request.session.login_user.user_name != None %}
+                                    <a class="dropdown-item"
+                                       href="{% url 'human_management:management_login' %}">换个账号登录</a>
+                                    <a class="dropdown-item"
+                                       href="{% url 'human_management:management_login_out' %}">注销</a>
+
+                                {% endif %}
+
+
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </nav>
+        <!-- Page content-->
+        <div class="container-fluid">
+            {% block content %}
+                {# 内容部分#}
+
+            {% endblock %}
+        </div>
+    </div>
+</div>
+<footer style="text-align: center">{#    底部版权页#}<p>现在是{% now "jS F Y H:i" %}</p>
+</footer>
+
+
+<!-- bootstrap JS-->
+<script src='/static/jquery/jquery-3.6.0.js'></script>
+<script src='/static/js/bootstrap.js'></script>
+<script src='/static/js/bootstrap.bundle.min.js'></script>
+<script src='/static/bootstrap_table/bootstrap-table.js'></script>
+
+<script src='/static/js/scripts.js'></script>
+
+{% block js %}
+    {#自己的js#}
+{% endblock %}
+
+
+</body>
+</html>

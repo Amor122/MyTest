@@ -43,7 +43,10 @@ MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
-    'django.middleware.csrf.CsrfViewMiddleware',
+    # 自定义的后台管理系统用户登录校验
+    'human_management.management_login_check.LoginCheckMiddleware',
+
+    # 'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
@@ -126,3 +129,17 @@ STATICFILES_DIRS = (
 # https://docs.djangoproject.com/en/3.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+# session 配置区
+# session使用文件缓存
+CACHES = {
+    'default': {
+        'BACKEND': 'django.core.cache.backends.locmem.LocMemCache',
+        'LOCATION': 'unique-snowflake'
+    },
+
+}
+SESSION_CACHE_ALIAS = 'default'  # 缓存的方案，基于本地内存的数据会重启丢失
+# SESSION_COOKIE_AGE='604800' #有效时长1周  7*24*60*60
+SESSION_COOKIE_NAME = 'session_id'
+SESSION_COOKIE_PATH = '/'
+SESSION_ENGINE = 'django.contrib.sessions.backends.cache'

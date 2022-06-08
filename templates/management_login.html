@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>教学管理系统登录</title>
+
+    <link rel="stylesheet" href="/static/css/reset.min.css">
+    <link rel='stylesheet' href='/static/css/my.css'>
+    <link rel='stylesheet' href='/static/css/my2.css'>
+    <link rel='stylesheet' href='/static/css/font-awesome.min.css'>
+    <link rel="stylesheet" href="/static/css/style.css">
+
+
+</head>
+
+<body>
+
+
+<div class="container">
+    <div class="info">
+        <h1>教学管理系统</h1>
+    </div>
+</div>
+<div class="form">
+    <div class="thumbnail"><img src="/static/css/hat.svg"/></div>
+    <form class="login-form" method="post" action="/human_management/management_login_handle">
+        <input name="account" type="text" placeholder="用户账号" required/>
+        <input name="password" type="password" placeholder="密码" required/>
+        <button>登录</button>
+        {% if error_msg %}
+            <span>{{ error_msg }}</span>
+        {% endif %}
+    </form>
+</div>
+<script src='/static/js/jquery.min.js'></script>
+<script src="/static/js/index.js"></script>
+
+</body>
+
+</html>

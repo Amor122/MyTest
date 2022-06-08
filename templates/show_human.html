@@ -1,0 +1,182 @@
+{% extends 'management_base.html' %}
+
+
+{% block title %}
+人员管理
+{% endblock %}
+
+{% block css %}
+
+{% endblock %}
+
+{% block content %}
+<div class="table-responsive">
+    <table id="table" style="width: 100%;">
+    </table>
+</div>
+
+<div class="modal fade" id="table_edit" tabindex="-1" role="dialog" aria-labelledby="my_title_label" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" id="my_title_label">编辑信息</h4>
+            </div>
+            <div class="modal-body" align="center">
+                <div class="form-group" style="margin-bottom: 5px;display: none">
+                    <label for="id">编号</label>&nbsp;&nbsp;
+                    <input type="text" id="id" class="form-group" disabled width="300px">
+                </div>
+                <div class="form-group" style="margin-bottom: 5px">
+                    <label for="user_name">姓名</label>&nbsp;&nbsp;
+                    <input type="text" id="user_name" class="form-group" width="300px">
+                </div>
+                <div class="form-group" style="margin-bottom: 5px">
+                    <label for="user_id">账号</label>&nbsp;&nbsp;
+                    <input type="text" id="user_id" class="form-group" width="300px">
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary">修改</button>
+
+            </div>
+        </div>
+
+    </div>
+
+</div>
+
+
+{% endblock %}
+
+{% block js %}
+<script>
+    var $table = $('#table');
+
+    $(document).ready(function () {
+        initTable();
+    });
+
+    function queryParams(params) {
+        var Parameters = [];
+        return {
+            order: params.order,
+            limit: params.limit,
+            offset: params.offset,
+            ParameterJson: JSON.stringify(Parameters)
+        };
+    }
+
+    function initTable() {
+        $table.bootstrapTable({
+            url: 'get_human',   //请求后台的URL（*）
+            method: 'post',      //请求方式（*）
+
+            // toolbar: '#Toolbar',    //工具按钮用哪个容器
+            striped: true,      //是否显示行间隔色
+            cache: false,      //是否使用缓存，默认为true，所以一般情况下需要设置一下这个属性（*）
+            pagination: true,     //是否显示分页（*）
+            sortable: true,      //是否启用排序
+            sortOrder: "asc",     //排序方式
+            // queryParams: queryParams, //传递参数（*）
+            sidePagination: "client",   //分页方式：client客户端分页，server服务端分页（*）
+            pageSize: 50,
+            pageList: [10, 25, 50, 100, 'ALL'],  //可供选择的每页的行数（*）
+            search: true,      //是否显示表格搜索，此搜索是客户端搜索，不会进服务端，所以，个人感觉意义不大
+            showColumns: true,     //是否显示所有的列
+            minimumCountColumns: 2,    //最少允许的列数
+            clickToSelect: false,    //是否启用点击选中行
+            // height: 800,      //行高，如果没有设置height属性，表格自动根据记录条数觉得表格高度
+            uniqueId: "id",      //每一行的唯一标识，一般为主键列
+            showToggle: false,     //是否显示详细视图和列表视图的切换按钮
+            cardView: false,     //是否显示详细视图
+            detailView: false,     //是否显示父子表
+            // iconSize: 'outline',
+            columns: [
+                {
+                    title: '所属组织',
+                    sortable: true,
+                    field: 'organization',
+                    align: 'center',
+                    valign: 'middle'
+                }, {
+                    title: '账号',
+                    sortable: true,
+                    searchable: true,
+                    field: 'user_id',
+                    align: 'center',
+                    valign: 'middle',
+                }, {
+                    title: '姓名',
+                    field: 'user_name',
+                    align: 'center',
+                    valign: 'middle',
+                }, {
+                    title: '职务',
+                    field: 'post',
+                    align: 'center',
+                    valign: 'middle',
+                }, {
+                    title: '是否主要负责人',
+                    field: 'chief',
+                    align: 'center',
+                    valign: 'middle',
+
+                    formatter: function (value, item, index) {
+                        if (value) {
+                            return "<span style='color: green'>√</span>";
+                        } else {
+                            return "<span style='color: red'>×</span>";
+
+                        }
+                    }
+
+                }, {
+                    title: '编辑',
+                    field: 'edit',
+                    align: 'center',
+                    valign: 'middle',
+                    events: {
+                        'click #edit': function (e, value, row, index) {
+
+                            $('#id').val(row.id);
+                            $('#user_name').val(row.user_name);
+                            $('#user_id').val(row.user_id)
+
+                            $('#table_edit').modal('show')
+                        }
+                    },
+                    formatter: function (value, item, index) {
+                        return "<button id='edit' class='btn btn-info'  data-toggle='modal' data-target='#table_edit'>编辑</button>"
+                    }
+
+                },
+
+
+            ]
+        });
+    }
+
+    function getData() {
+        return $table.bootstrapTable('getSelections');
+    }
+
+    function setSelections(data) {
+        setTimeout(function () {
+            $table.bootstrapTable('checkBy', {field: 'Name', values: data});
+        }, 500);
+    }
+
+    function Refresh() {
+        $table.bootstrapTable('refresh');
+    }
+</script>
+<script>
+
+    $('#sidebarToggle').click(function () {
+            console.log('clicked')
+            $('#table').bootstrapTable('resetView')
+
+        }
+    )
+</script>
+{% endblock %}

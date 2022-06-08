@@ -1,0 +1,13 @@
+{% extends 'management_base.html' %}
+
+
+{% block title %}
+    欢迎
+{% endblock %}
+
+
+{% block content %}
+    <p>欢迎您，{{ request.session.login_user.user_name }}</p>
+{% endblock %}
+
+
