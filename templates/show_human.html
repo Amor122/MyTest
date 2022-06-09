@@ -11,7 +11,7 @@
 
 {% block content %}
 <div class="table-responsive">
-    <table id="table" style="width: 100%;">
+    <table id="my_table" style="width: 100%;">
     </table>
 </div>
 
@@ -34,11 +34,19 @@
                     <label for="user_id">账号</label>&nbsp;&nbsp;
                     <input type="text" id="user_id" class="form-group" width="300px">
                 </div>
+                <div class="form-group" style="margin-bottom: 5px">
+                    <label for="organization">组织</label>&nbsp;&nbsp;
+                    <select name="organization" id="organization" style="width: 227px"></select>
+                </div>
+                <div class="form-group" style="margin-bottom: 5px">
+                    <label for="post">职位</label>&nbsp;&nbsp;
+                    <select name="post" id="post" style="width: 227px"></select>
+                </div>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-primary">修改</button>
-
+                <button type="button" class="btn btn-primary" onclick="edit_human()">修改</button>
             </div>
+
         </div>
 
     </div>
@@ -50,7 +58,7 @@
 
 {% block js %}
 <script>
-    var $table = $('#table');
+    var $table = $('#my_table');
 
     $(document).ready(function () {
         initTable();
@@ -141,6 +149,53 @@
                             $('#id').val(row.id);
                             $('#user_name').val(row.user_name);
                             $('#user_id').val(row.user_id)
+                            $('#organization').empty()
+                            $.ajax({
+                                url: "/test_management/get_organizations",//数据请求的地址
+                                method: "POST",//ajax数据访问的方法
+                                dataType: "json",//s数据类型格式
+                                success: function (data_receive) {
+                                    organization_list = data_receive.organization_list
+                                    for(org in organization_list){
+                                        if(organization_list[org]===row.organization){
+                                            $('#organization').append("<option selected value='"+organization_list[org]+"'>"+organization_list[org]+"</option>")
+                                        }else{
+                                            $('#organization').append("<option value='"+organization_list[org]+"'>"+organization_list[org]+"</option>")
+
+                                        }
+                                    }
+
+                                },
+                                error: function () {
+                                    toastr.error('组织数据获取失败，请刷新后再试')
+
+                                }
+
+                            })
+                            $('#post').empty()
+                            $.ajax({
+                                url: "/test_management/get_posts",//数据请求的地址
+                                method: "POST",//ajax数据访问的方法
+                                dataType: "json",//s数据类型格式
+                                success: function (data_receive) {
+                                    post_list = data_receive.post_list
+                                    for(pos in post_list){
+                                        if(post_list[pos]===row.post){
+                                            $('#post').append("<option selected value='"+post_list[pos]+"'>"+post_list[pos]+"</option>")
+                                        }else{
+                                            $('#post').append("<option value='"+post_list[pos]+"'>"+post_list[pos]+"</option>")
+
+                                        }
+                                    }
+
+                                },
+                                error: function () {
+                                    toastr.error('职位数据获取失败，请刷新后再试')
+
+                                }
+
+                            })
+
 
                             $('#table_edit').modal('show')
                         }
@@ -178,5 +233,46 @@
 
         }
     )
+
+    function edit_human() {
+        form_data = {
+            'id': $('#id').val(),
+            'user_name': $('#user_name').val(),
+            'user_id': $('#user_id').val(),
+            'organization':$('#organization').val(),
+            'post':$('#post').val()
+        }
+        $.ajax({
+            url: "/test_management/edit_human",//数据请求的地址
+            method: "POST",//ajax数据访问的方法
+            // timeout: 30,
+            data: form_data,
+            dataType: "json",//s数据类型格式
+            success: function (data_receive) {
+                if (data_receive.status) {
+                    toastr.success('修改成功')
+                    $('#table_edit').modal('hide')
+                    $table.bootstrapTable('refresh');
+
+                } else {
+                    toastr.error('修改失败，可能是重复的账号！')
+                    $table.bootstrapTable('refresh');
+
+                }
+
+
+            },
+            error: function (data_receive) {
+                toastr.error('数据提交失败，请刷新后再试')
+                $('#table_edit').modal('hide')
+                $table.bootstrapTable('refresh');
+
+
+            }
+
+        })
+
+
+    }
 </script>
 {% endblock %}

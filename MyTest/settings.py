@@ -44,7 +44,7 @@ MIDDLEWARE = [
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     # 自定义的后台管理系统用户登录校验
-    'human_management.management_login_check.LoginCheckMiddleware',
+    # 'human_management.management_login_check.LoginCheckMiddleware',
 
     # 'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',

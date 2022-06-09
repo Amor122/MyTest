@@ -57,7 +57,7 @@ class Organization(HumanCommon):
     organization_type = models.ForeignKey(OrganizationType, on_delete=models.SET_NULL, null=True, blank=True,
                                           related_name='down_organization', verbose_name='组织类型')
 
-    organization_name = models.CharField(max_length=30, verbose_name='组织名称')
+    organization_name = models.CharField(max_length=30, verbose_name='组织名称',unique=True)
 
     def __str__(self):
         return self.organization_name

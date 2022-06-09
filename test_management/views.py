@@ -1,7 +1,8 @@
-from django.http import JsonResponse
+from django.db import IntegrityError
+from django.http import JsonResponse, HttpRequest
 from django.shortcuts import render
 
-from human_management.models import Human
+from human_management.models import Human, Organization, HumanPost
 
 
 def test_view(request):
@@ -40,4 +41,63 @@ def get_human(request):
         data_list.append(data_dict)
     print(data_list)
 
-    return JsonResponse(data=data_list,safe=False)
+    return JsonResponse(data=data_list, safe=False)
+
+
+def edit_human(request: HttpRequest):
+    print(request.method)
+    if request.method == 'POST':
+        id = request.POST.get('id')
+        user_name = request.POST.get('user_name')
+        user_id = request.POST.get('user_id')
+        organization = request.POST.get('organization')
+        post = request.POST.get('post')
+        human_obj: Human = Human.objects.get(pk=id)
+        print(id, user_id, user_name, organization, post)
+        organization_obj = Organization.objects.filter(organization_name=organization).first()
+        post_obj = HumanPost.objects.filter(post_name=post).first()
+        if all((human_obj, organization_obj, post_obj)):
+            human_obj.user_name = user_name
+            human_obj.user_id = user_id
+            human_obj.post = post_obj
+            human_obj.organization = organization_obj
+            update_status = False
+            try:
+                human_obj.save()
+                print('修改成功')
+                update_status = True
+            except IntegrityError as e:
+                print('修改失败', e)
+                update_status = False
+            return JsonResponse(data={
+                'status': update_status
+            }, safe=False)
+        else:
+            return JsonResponse(data={
+                'status': False
+            }, safe=False)
+
+    return JsonResponse(data={
+        'status': False,
+        'message': 'method not allowed'
+    }, safe=False)
+
+
+def get_organizations(requests):
+    organization_objs = Organization.objects.all()
+    organization_list = []
+    for obj in organization_objs:
+        organization_list.append(obj.organization_name)
+    return JsonResponse(data={
+        'organization_list': organization_list
+    }, safe=False, json_dumps_params={'ensure_ascii': False})
+
+
+def get_posts(requests):
+    post_objs = HumanPost.objects.all()
+    post_list = []
+    for obj in post_objs:
+        post_list.append(obj.post_name)
+    return JsonResponse(data={
+        'post_list': post_list
+    }, safe=False, json_dumps_params={'ensure_ascii': False})
