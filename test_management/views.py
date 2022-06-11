@@ -83,6 +83,44 @@ def edit_human(request: HttpRequest):
     }, safe=False)
 
 
+def add_human(request: HttpRequest):
+    print(request.method)
+    if request.method == 'POST':
+        user_name = request.POST.get('user_name')
+        user_id = request.POST.get('user_id')
+        organization = request.POST.get('organization')
+        post = request.POST.get('post')
+        human_obj: Human = Human()
+        print(id, user_id, user_name, organization, post)
+        organization_obj = Organization.objects.filter(organization_name=organization).first()
+        post_obj = HumanPost.objects.filter(post_name=post).first()
+        if all((organization_obj, post_obj)):
+            human_obj.user_name = user_name
+            human_obj.user_id = user_id
+            human_obj.post = post_obj
+            human_obj.organization = organization_obj
+            update_status = False
+            try:
+                human_obj.save()
+                print('修改成功')
+                update_status = True
+            except IntegrityError as e:
+                print('修改失败', e)
+                update_status = False
+            return JsonResponse(data={
+                'status': update_status
+            }, safe=False)
+        else:
+            return JsonResponse(data={
+                'status': False
+            }, safe=False)
+
+    return JsonResponse(data={
+        'status': False,
+        'message': 'method not allowed'
+    }, safe=False)
+
+
 def get_organizations(requests):
     organization_objs = Organization.objects.all()
     organization_list = []
@@ -101,3 +139,59 @@ def get_posts(requests):
     return JsonResponse(data={
         'post_list': post_list
     }, safe=False, json_dumps_params={'ensure_ascii': False})
+
+
+def reset_user_password(request):
+    if request.method == 'POST':
+        id = request.POST.get('id')
+        if not id:
+            return JsonResponse(data={
+                'status': False,
+                'message': 'id not found'
+            }, safe=False)
+
+        human_obj: Human = Human.objects.get(pk=id)
+        default_password = 'abc123456'
+        if human_obj:
+            human_obj.password = default_password
+            human_obj.save()
+            return JsonResponse(data={
+                'status': True,
+                'message': f'密码重置成功，重置为:{default_password}'
+            }, safe=False)
+        return JsonResponse(data={
+            'status': True
+        }, safe=False)
+
+    else:
+        return JsonResponse(data={
+            'status': False,
+            'message': 'method not allowed'
+        }, safe=False)
+
+
+def delete_user_by_id(request):
+    if request.method == 'POST':
+        id = request.POST.get('id')
+        if not id:
+            return JsonResponse(data={
+                'status': False,
+                'message': 'id not found'
+            }, safe=False)
+
+        human_obj: Human = Human.objects.get(pk=id)
+        if human_obj:
+            human_obj.delete()
+            return JsonResponse(data={
+                'status': True,
+                'message': f'用户删除成功'
+            }, safe=False)
+        return JsonResponse(data={
+            'status': True
+        }, safe=False)
+
+    else:
+        return JsonResponse(data={
+            'status': False,
+            'message': 'method not allowed'
+        }, safe=False)

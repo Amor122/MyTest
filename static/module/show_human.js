@@ -19,7 +19,7 @@ function initTable() {
         url: 'get_human',   //请求后台的URL（*）
         method: 'post',      //请求方式（*）
 
-        // toolbar: '#Toolbar',    //工具按钮用哪个容器
+        toolbar: '#toolbar',    //工具按钮用哪个容器
         striped: true,      //是否显示行间隔色
         cache: false,      //是否使用缓存，默认为true，所以一般情况下需要设置一下这个属性（*）
         pagination: true,     //是否显示分页（*）
@@ -95,8 +95,8 @@ function initTable() {
                             method: "POST",//ajax数据访问的方法
                             dataType: "json",//s数据类型格式
                             success: function (data_receive) {
-                                organization_list = data_receive.organization_list
-                                for (org in organization_list) {
+                                let organization_list = data_receive.organization_list
+                                for (let org in organization_list) {
                                     if (organization_list[org] === row.organization) {
                                         $('#organization').append("<option selected value='" + organization_list[org] + "'>" + organization_list[org] + "</option>")
                                     } else {
@@ -118,8 +118,8 @@ function initTable() {
                             method: "POST",//ajax数据访问的方法
                             dataType: "json",//s数据类型格式
                             success: function (data_receive) {
-                                post_list = data_receive.post_list
-                                for (pos in post_list) {
+                                let post_list = data_receive.post_list
+                                for (let pos in post_list) {
                                     if (post_list[pos] === row.post) {
                                         $('#post').append("<option selected value='" + post_list[pos] + "'>" + post_list[pos] + "</option>")
                                     } else {
@@ -141,11 +141,26 @@ function initTable() {
                     }
                 },
                 formatter: function (value, item, index) {
-                    return "<button id='edit' class='btn btn-info'  data-toggle='modal' data-target='#table_edit'>编辑</button>"
+                    return "<button id='edit' class='btn btn-info btn-sm'  data-toggle='modal' data-target='#table_edit'>编辑</button>"
                 }
 
+            }, {
+                title: '密码',
+                field: 'reset',
+                align: 'center',
+                valign: 'middle',
+                formatter: function (value, item, index) {
+                    return '<button class="btn btn-warning btn-sm" onclick=" if( confirm(\'确认重置该用户密码\') ) reset_password(\'' + item.id + '\')">重置</button>'
+                }
+            }, {
+                title: '删除',
+                field: 'delete',
+                align: 'center',
+                valign: 'middle',
+                formatter: function (value, item, index) {
+                    return '<button class="btn btn-danger btn-sm" onclick=" if( confirm(\'确认删除该用户\') ) delete_user(\'' + item.id + '\')">删除</button>'
+                }
             },
-
 
         ]
     });
@@ -211,4 +226,152 @@ function edit_human() {
     })
 
 
+}
+
+$('#table_add_button').click(function () {
+    $('#user_id_add').empty()
+    $('#user_name_add').empty()
+    $.ajax({
+        url: "/test_management/get_organizations",//数据请求的地址
+        method: "POST",//ajax数据访问的方法
+        dataType: "json",//s数据类型格式
+        success: function (data_receive) {
+            let organization_list = data_receive.organization_list
+            for (let org in organization_list) {
+                $('#organization_add').append("<option value='" + organization_list[org] + "'>" + organization_list[org] + "</option>")
+
+            }
+
+        },
+        error: function () {
+            toastr.error('组织数据获取失败，请刷新后再试')
+
+        }
+    })
+    $.ajax({
+        url: "/test_management/get_posts",//数据请求的地址
+        method: "POST",//ajax数据访问的方法
+        dataType: "json",//s数据类型格式
+        success: function (data_receive) {
+            let post_list = data_receive.post_list
+            for (let pos in post_list) {
+                $('#post_add').append("<option value='" + post_list[pos] + "'>" + post_list[pos] + "</option>")
+            }
+        },
+        error: function () {
+            toastr.error('职位数据获取失败，请刷新后再试')
+
+        }
+
+    })
+
+    $('#table_add').modal('show')
+})
+
+$('#table_add_submit').click(function () {
+    let user_id = $('#user_id_add').val()
+    let user_name = $('#user_name_add').val()
+    let organization = $('#organization_add').val()
+    let post = $('#post_add').val()
+    if (!user_id || !user_name) {
+        toastr.warning("参数不全")
+    } else {
+        let post_data = {
+            'user_id': user_id,
+            'user_name': user_name,
+            'organization': organization,
+            'post': post
+        }
+        $.ajax({
+            url: "/test_management/add_human",//数据请求的地址
+            method: "POST",//ajax数据访问的方法
+            data: post_data,
+            dataType: "json",//s数据类型格式
+            success: function (data_receive) {
+                if (data_receive.status) {
+                    toastr.success('新增成功')
+                    $('#table_add').modal('hide')
+                    $table.bootstrapTable('refresh');
+
+                } else {
+                    toastr.error('修改失败，可能是重复的账号！')
+                    $table.bootstrapTable('refresh');
+
+                }
+            },
+            error: function (data_receive) {
+                toastr.error('数据提交失败，请刷新后再试')
+                $('#table_add').modal('hide')
+                $table.bootstrapTable('refresh');
+
+
+            }
+
+        })
+
+
+    }
+
+
+})
+
+
+function reset_password(id) {
+    let post_data = {
+        'id': id,
+    }
+    $.ajax({
+        url: "/test_management/reset_user_password",//数据请求的地址
+        method: "POST",//ajax数据访问的方法
+        data: post_data,
+        dataType: "json",//s数据类型格式
+        success: function (data_receive) {
+            if (data_receive.status) {
+                toastr.success(data_receive.message)
+                $table.bootstrapTable('refresh');
+
+            } else {
+                toastr.error('修改失败！')
+                $table.bootstrapTable('refresh');
+
+            }
+        },
+        error: function (data_receive) {
+            toastr.error('数据提交失败，请刷新后再试')
+            $table.bootstrapTable('refresh');
+
+
+        }
+
+    })
+}
+
+function delete_user(id) {
+    let post_data = {
+        'id': id,
+    }
+    $.ajax({
+        url: "/test_management/delete_user_by_id",//数据请求的地址
+        method: "POST",//ajax数据访问的方法
+        data: post_data,
+        dataType: "json",//s数据类型格式
+        success: function (data_receive) {
+            if (data_receive.status) {
+                toastr.success(data_receive.message)
+                $table.bootstrapTable('refresh');
+
+            } else {
+                toastr.error('操作失败！')
+                $table.bootstrapTable('refresh');
+
+            }
+        },
+        error: function (data_receive) {
+            toastr.error('数据提交失败，请刷新后再试')
+            $table.bootstrapTable('refresh');
+
+
+        }
+
+    })
 }

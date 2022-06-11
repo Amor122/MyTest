@@ -10,11 +10,17 @@
 {% endblock %}
 
 {% block content %}
-<div class="table-responsive">
-    <table id="my_table" style="width: 100%;">
+<div class="container">
+    <div id="toolbar" class="btn-group">
+        <div >
+            <button class="btn btn-danger" id="table_add_button">新增</button>
+        </div>
+    </div>
+    <table id="my_table" class="table table-striped">
     </table>
 </div>
 
+<!--表内编辑框-->
 <div class="modal fade" id="table_edit" tabindex="-1" role="dialog" aria-labelledby="my_title_label" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
@@ -45,6 +51,40 @@
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-primary" onclick="edit_human()">修改</button>
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+<!--顶部新增按钮-->
+<div class="modal fade" id="table_add" tabindex="-1" role="dialog" aria-labelledby="my_title_label" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" id="my_title_label_add">新增信息</h4>
+            </div>
+            <div class="modal-body" align="center">
+                <div class="form-group" style="margin-bottom: 5px">
+                    <label for="user_id_add">账号</label>&nbsp;&nbsp;
+                    <input type="text" id="user_id_add" class="form-group" width="300px" required>
+                </div>
+                <div class="form-group" style="margin-bottom: 5px">
+                    <label for="user_name_add">姓名</label>&nbsp;&nbsp;
+                    <input type="text" id="user_name_add" class="form-group" width="300px" required>
+                </div>
+                <div class="form-group" style="margin-bottom: 5px">
+                    <label for="organization_add">组织</label>&nbsp;&nbsp;
+                    <select name="organization" id="organization_add" style="width: 227px"></select>
+                </div>
+                <div class="form-group" style="margin-bottom: 5px">
+                    <label for="post_add">职位</label>&nbsp;&nbsp;
+                    <select name="post" id="post_add" style="width: 227px"></select>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" id="table_add_submit" class="btn btn-primary">修改</button>
             </div>
 
         </div>
