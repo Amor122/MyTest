@@ -3,6 +3,7 @@ from django.http import JsonResponse, HttpRequest
 from django.shortcuts import render
 
 from human_management.models import Human, Organization, HumanPost
+from .tools import human_management_decorate
 
 
 def test_view(request):
@@ -44,6 +45,7 @@ def get_human(request):
     return JsonResponse(data=data_list, safe=False)
 
 
+@human_management_decorate
 def edit_human(request: HttpRequest):
     print(request.method)
     if request.method == 'POST':
@@ -83,6 +85,7 @@ def edit_human(request: HttpRequest):
     }, safe=False)
 
 
+@human_management_decorate
 def add_human(request: HttpRequest):
     print(request.method)
     if request.method == 'POST':
@@ -141,6 +144,7 @@ def get_posts(requests):
     }, safe=False, json_dumps_params={'ensure_ascii': False})
 
 
+@human_management_decorate
 def reset_user_password(request):
     if request.method == 'POST':
         id = request.POST.get('id')
@@ -160,7 +164,7 @@ def reset_user_password(request):
                 'message': f'密码重置成功，重置为:{default_password}'
             }, safe=False)
         return JsonResponse(data={
-            'status': True
+            'status': False
         }, safe=False)
 
     else:
@@ -170,6 +174,7 @@ def reset_user_password(request):
         }, safe=False)
 
 
+@human_management_decorate
 def delete_user_by_id(request):
     if request.method == 'POST':
         id = request.POST.get('id')

@@ -294,7 +294,11 @@ $('#table_add_submit').click(function () {
                     $table.bootstrapTable('refresh');
 
                 } else {
-                    toastr.error('修改失败，可能是重复的账号！')
+                    if (data_receive.message) {
+                        toastr.error(data_receive.message)
+                    } else {
+                        toastr.error('修改失败，可能是重复的账号！')
+                    }
                     $table.bootstrapTable('refresh');
 
                 }
@@ -331,7 +335,11 @@ function reset_password(id) {
                 $table.bootstrapTable('refresh');
 
             } else {
-                toastr.error('修改失败！')
+                if (data_receive.message) {
+                    toastr.error(data_receive.message)
+                } else {
+                    toastr.error('修改失败')
+                }
                 $table.bootstrapTable('refresh');
 
             }
@@ -361,7 +369,11 @@ function delete_user(id) {
                 $table.bootstrapTable('refresh');
 
             } else {
-                toastr.error('操作失败！')
+                if (data_receive.message) {
+                    toastr.error(data_receive.message)
+                } else {
+                    toastr.error('操作失败！')
+                }
                 $table.bootstrapTable('refresh');
 
             }
