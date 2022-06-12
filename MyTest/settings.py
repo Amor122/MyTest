@@ -44,7 +44,7 @@ MIDDLEWARE = [
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     # 自定义的后台管理系统用户登录校验
-    # 'human_management.management_login_check.LoginCheckMiddleware',
+    'human_management.management_login_check.LoginCheckMiddleware',
 
     # 'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
@@ -143,3 +143,74 @@ SESSION_CACHE_ALIAS = 'default'  # 缓存的方案，基于本地内存的数据
 SESSION_COOKIE_NAME = 'session_id'
 SESSION_COOKIE_PATH = '/'
 SESSION_ENGINE = 'django.contrib.sessions.backends.cache'
+
+# 日志配置区，LOGGING
+LOGGING = {
+    'version': 1.0,
+    # 关闭默认的日志
+    'disable_existing_loggers': True,
+    # 过滤
+    'filters': {
+        'require_debug_false': {
+            '()': 'django.utils.log.RequireDebugFalse',
+        },
+        'require_debug_true': {
+            '()': 'django.utils.log.RequireDebugTrue',
+        },
+    },
+    # 格式化
+    'formatters': {
+        'simple': {
+            'format': '[%(asctime)s %(levelname)s] %(message)s',
+            'datefmt': '%Y-%m-%d %H:%M:%S'
+        },
+        'verbose': {
+            'format': '{levelname} {asctime} {module} {process:d} {thread:d} {message}',
+            'style': '{'
+        }
+    },
+    # 处理器
+    'handlers': {
+        # 打印显示
+        'out': {
+            'class': 'logging.StreamHandler',
+            'formatter': 'simple',
+            'level': 'DEBUG'
+        },
+        # 文件处理
+        'file': {
+            'class': 'logging.FileHandler',
+            'formatter': 'simple',
+            'level': 'INFO',
+            'filename': 'my_log.log'
+        },
+        # 邮件发送
+        'mail_admins': {
+            'level': 'ERROR',
+            'formatter': 'verbose',
+            'class': 'django.utils.log.AdminEmailHandler',
+            'filters': ['require_debug_false'],
+            # 'email_backend':  'django.core.mail.backends.smtp.BaseEmailBackend',
+            'include_html': True,
+        }
+    },
+    # 记录器
+    'loggers': {
+        'django': {
+            'handlers': ['out'],
+            'level': 'INFO',
+            'propagate': False
+        },
+        'my_log': {
+            'handlers': ['file'],
+            'level': 'INFO',
+            'propagate': True
+        },
+        'serious_log': {
+            'handlers': ['mail_admins'],
+            'level': 'ERROR',
+            'propagate': True
+        }
+
+    }
+}

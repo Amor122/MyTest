@@ -31,12 +31,13 @@ def human_management_decorate(func):
                         post_name = user_obj.post.post_name
                         if post_name == '信息系统管理员':
                             # 这里标识通过校验，可以执行修改操作
-                            pass
+                            # 执行被装饰的函数
+                            print('通过校验')
+                            return func(request)
+
                         else:
                             return warning_response
                     else:
                         return warning_response
-        # 执行被装饰的函数
-        func(request)
 
     return new_func

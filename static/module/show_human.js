@@ -328,7 +328,7 @@ function reset_password(id) {
         url: "/test_management/reset_user_password",//数据请求的地址
         method: "POST",//ajax数据访问的方法
         data: post_data,
-        dataType: "json",//s数据类型格式
+        dataType: "json",//返回数据类型格式
         success: function (data_receive) {
             if (data_receive.status) {
                 toastr.success(data_receive.message)
@@ -344,7 +344,7 @@ function reset_password(id) {
 
             }
         },
-        error: function (data_receive) {
+        error: function () {
             toastr.error('数据提交失败，请刷新后再试')
             $table.bootstrapTable('refresh');
 

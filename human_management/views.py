@@ -42,7 +42,7 @@ def management_login_handle(request):
                         print(login_source)
                         response = HttpResponseRedirect('management_welcome')  # 这里留着以后转到其他页面
                         token = uuid.uuid4().hex
-                        response.set_cookie('login_token', token, max_age=2000)
+                        response.set_cookie('login_token', token, max_age=12*60*60)
                         return response
                 else:
                     error_msg = '用户密码错误，如忘记，请联系管理员'

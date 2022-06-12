@@ -31,7 +31,7 @@ class OrganizationModelAdmin(admin.ModelAdmin):
 @admin.register(models.Human)
 class HumanModelAdmin(admin.ModelAdmin):
     list_display = ('id', 'user_id', 'user_name', 'organization')
-    fields = ('user_id', 'user_name', 'organization', 'password')
+    fields = ('user_id', 'user_name', 'organization', 'post', 'password')
     list_per_page = 10
     list_filter = ('organization',)
     search_fields = ('user_name',)
