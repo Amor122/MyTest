@@ -13,5 +13,5 @@ urlpatterns = [
     path('management_welcome', views.management_welcome, name='management_welcome'),
     # 登录校验
     path('management_login_handle', views.management_login_handle, name='management_login_handle'),
-    path('testpage', views.testpage, name='testpage'),
+    path('test_page', views.test_page, name='test_page'),
 ]

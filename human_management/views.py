@@ -71,6 +71,6 @@ def management_welcome(request):
     return render(request, 'management_welcome.html', locals())
 
 
-def testpage(request):
+def test_page(request):
     """欢迎页"""
-    return render(request, 'test_page.html', locals())
+    return render(request, 'draw_tree.html', locals())
