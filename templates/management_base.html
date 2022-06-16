@@ -12,15 +12,16 @@
     <meta name="author" content="你的名字"/>
 
     <title>{% block title %}基础模板页面{% endblock %}</title>
+    {% block css %}
+
+
+    {% endblock %}
     <link rel='stylesheet' href='/static/css/styles.css' />
     <link rel='stylesheet' href='/static/bootstrap_table/bootstrap-table.css'>
     <link rel='stylesheet' href='/static/css/bootstrap.css'>
     <link rel='stylesheet' href='/static/toastr/toastr.min.css'>
     <link rel='stylesheet' href= '/static/css/bootstrap-theme.min.css' >
-    {% block css %}
 
-
-    {% endblock %}
 </head>
 <body>
 <div class="d-flex" id="wrapper">
@@ -28,7 +29,7 @@
     <div class="border-end bg-white" id="sidebar-wrapper">
         <div class="sidebar-heading border-bottom bg-light" style="text-align: center">教学考试管理系统</div>
         <div class="list-group list-group-flush">
-            <a class="list-group-item list-group-item-action list-group-item-light p-3" href="#!"
+            <a class="list-group-item list-group-item-action list-group-item-light p-3" href="/test_management/show_organization"
                style="text-align: center">组织管理</a>
             <a class="list-group-item list-group-item-action list-group-item-light p-3" href="/test_management/show_human"
                style="text-align: center">人员管理</a>

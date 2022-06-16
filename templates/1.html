@@ -1,0 +1,277 @@
+{% extends 'management_base.html' %}
+
+
+{% block title %}
+组织管理
+{% endblock %}
+
+{% block css %}
+<style>
+    .dvItem {
+        position: absolute;
+        width: 24px;
+        border: 1px solid #999999;
+        font-size: 12px;
+        padding: 5px;
+        height: 80px;
+        z-index: 9;
+        background-color: #FFFFFF;
+        line-height: 16px;
+    }
+
+    a {
+        text-decoration: none;
+        color: #333333;
+    }
+
+    .dvhline {
+        position: absolute;
+        z-index: 17;
+        padding: 0px;
+        margin: 0px;
+        border-top: 1px solid #999999;
+    }
+
+    .dvvline {
+        color: blue;
+        position: absolute;
+        background-color: #999999;
+        width: 1px;
+        z-index: 17;
+    }
+</style>
+{% endblock %}
+
+
+{% block content %}
+<div id="List_DV"></div>
+{% endblock %}
+
+{% block js %}
+<script>
+    var dItem = new Array();
+    var w = 600;
+    var h = 40;
+    var iw = 60;
+    var ih = 80;
+    var boxh = 80;
+    var startleft = 400;
+    var starttop = 40;
+    var hr = "<hr size=\"1\" noshade>"
+    var labledv = "<div class=\"dvItem\" style=\""
+    var hdv = "<div class=\"dvhline\" style=\"width:";
+    var vdv = "<div class=\"dvvline\" style=\"height:" + h + "px;\"";
+    var endsdv = "\">";
+    var enddv = "</div>";
+    var htm = "";
+    var len;
+    var maxn = 0;//深度
+    function Load_Data() {
+        dItem[0] = "1|总经理|0|";
+        dItem[1] = "2|营运主管|1|";
+        dItem[2] = "3|技术主管|1|";
+        //dItem[3] = "4|test|1|";
+        //dItem[4] = "5|test|1|";
+        dItem[3] = "4|客服主管|2|";
+        dItem[4] = "5|商务主管|2|";
+        dItem[5] = "6|商务代表|5|";
+        dItem[6] = "7|营运策划|2|";
+        dItem[7] = "8|程序员|3|";
+        dItem[8] = "9|美工|3|";
+        len = dItem.length;
+        Set_Item(0, 0);
+        Set_Max();
+        Write_Item(0, 0, 0, 1);
+        var htm1 = "";
+        for (var i = 0; i < len; i++) {
+            htm1 = htm1 + dItem[i] + "<br>";
+        }
+        //document.getElementById("Load_DV").innerHTML = htm1 ;
+        document.getElementById("List_DV").innerHTML = htm;
+    }
+
+    //设置层次
+    function Set_Item(pid, ni) {
+        var n = ni + 1;
+        var iAry = new Array();
+        for (var i = 0; i < len; i++) {
+            iAry = dItem[i].split("|");
+            if (iAry[2] == pid) {
+                dItem[i] = dItem[i] + ni;
+                if (maxn < ni) {
+                    maxn = ni;
+                }
+                Set_Item(iAry[0], n);
+            }
+        }
+    }
+
+    //设置节点子节点中最大数
+    function Set_Max() {
+        var iAry = new Array();
+        var childnum;
+        for (var i = 0; i < len; i++) {
+            iAry = dItem[i].split("|");
+            childnum = Get_Child_Num(iAry[0]);
+            if (childnum <= 1) {
+                dItem[i] = dItem[i] + "|0";
+            } else {
+                dItem[i] = dItem[i] + "|" + Get_Max(iAry[0], iAry[3]);
+            }
+        }
+    }
+
+    function Get_Max(pid, start) {
+        var iAry = new Array();
+        var m = 0;
+        var n = 0;
+        for (var j = start; j <= maxn; j++) {
+            for (var i = 0; i < len; i++) {
+                iAry = dItem[i].split("|");
+                if (iAry[3] == j) {
+                    if (Get_RootID(pid, iAry[0])) {
+                        m = m + 1;
+                    }
+                }
+                if (n < m) {
+                    n = m;
+                }
+            }
+            m = 0;
+        }
+        return n;
+    }
+
+    function Get_RootID(pid, id) {
+        var iAry = new Array();
+        for (var i = 0; i < len; i++) {
+            iAry = dItem[i].split("|");
+            if (iAry[0] == id) {
+                if (iAry[2] == pid) {
+                    return true;
+                    break;
+                } else {
+                    return Get_RootID(pid, iAry[2]);
+                }
+            }
+        }
+        return false;
+    }
+
+    //取得 id 所在的数组
+    function Get_Item(id) {
+        var i;
+        var items;
+        var iAry = new Array();
+        for (i = 0; i < len; i++) {
+            iAry = dItem[i].split("|");
+            if (iAry[0] == id) {
+                items = dItem[i];
+                break;
+            }
+        }
+        return items;
+    }
+
+    //取得子节点个数
+    function Get_Child_Num(pid) {
+        var i;
+        var rnum = 0;
+        var iAry = new Array();
+        for (i = 0; i < len; i++) {
+            iAry = dItem[i].split("|");
+            if (iAry[2] == pid) {
+                rnum = rnum + 1;
+            }
+        }
+        return rnum;
+    }
+
+    function Write_Item(ipid, ltmp, wtmp, cnt) {
+
+        var iAry = new Array();
+        var id;
+        var txt;
+        var pid;
+        var lens;
+        var maxnum;
+        var t;
+        var l;
+        var hline_width;
+        var dvline = "";
+        var childnum = 0;
+        var itxt;
+        var tmpcnt = 0;
+        for (var i = 0; i < len; i++) {
+
+            itxt = dItem[i];
+            iAry = itxt.split("|");
+            if (iAry[2] == ipid) {
+
+                id = iAry[0];
+                txt = "<a href=\"?id=" + id + "\">" + iAry[1] + "</a>";
+                pid = iAry[2];
+                lens = iAry[3];
+                maxnum = iAry[4];
+                childnum = Get_Child_Num(id);
+                hline_width = maxnum * iw;
+                if (pid == 0) {
+                    t = starttop;
+                    l = startleft;
+                } else {
+                    t = starttop + 2 * lens * h + lens * ih;
+//  l = ltmp + wtmp / cnt  * tmpcnt;
+                    l = ltmp - wtmp / 2 + (wtmp / 2) * tmpcnt;
+                }
+                dvline = "";
+                if (childnum > 1) {
+                    var t1;
+                    var l1;
+                    var t2;
+                    var l2;
+                    var w2;
+                    t1 = t + ih;
+                    l1 = l + 12;
+                    w2 = hline_width / 2;
+                    t2 = t1 + h;
+                    l2 = l - w2 + 10;
+                    dvline = "<div class=\"dvvline\" style=\"height:" + h + "px;left:" + l1 + "px;top:" + t1 + "\"></div>";
+                    dvline = dvline + "<div class=\"dvhline\" style=\"width:" + hline_width + "px;left:" + l2 + "px;top:" + t2 + "\"></div>";
+                    for (var j = 0; j < childnum; j++) {
+                        var t3;
+                        var l3;
+                        t3 = t1 + h;
+                        l3 = l2 + (hline_width / (childnum - 1)) * j;
+                        var tmpline = "<div class=\"dvvline\" style=\"height:" + h + "px;left:" + l3 + "px;top:" + t3 + "\"></div>";
+                        dvline = dvline + tmpline;
+                    }
+                    dvline = dvline
+
+                } else if (childnum == 1) {
+                    var t4;
+                    var l4;
+                    l4 = l + 12;
+                    dvline = "<div class=\"dvvline\" style=\"height:" + h + "px;left:" + l4 + "px;top:" + (t + ih) + "\"></div>";
+                    dvline = dvline + "<div class=\"dvvline\" style=\"height:" + h + "px;left:" + l4 + "px;top:" + (t + ih + h) + "\"></div>";
+
+                }
+                //dvline = hdv + hline_width + endsdv + hr + enddv;<hr size=\"1\" noshade>
+                //var ldv = "";
+                //ldv = "<div class=\"dvItem\" style=\"left:" + l + "px;top:" + t + "px;\">" + txt + "<div>"
+                //htm = htm +ldv + dvline;
+                htm = htm + labledv + "left:" + l + "px;top:" + t + "px" + endsdv + txt + enddv + dvline;
+                if (cnt % 2 == 0) {
+                    tmpcnt = tmpcnt + 2;
+                } else {
+                    tmpcnt = tmpcnt + 1;
+                }
+                Write_Item(id, l, hline_width, childnum);
+
+            }//if(iAry[2] == ipid)
+        }
+
+    }
+
+    Load_Data()
+</script>
+{% endblock %}

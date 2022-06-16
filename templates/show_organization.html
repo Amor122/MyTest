@@ -1,0 +1,75 @@
+{% extends 'management_base.html' %}
+
+
+{% block title %}
+组织管理
+{% endblock %}
+
+{% block css %}
+<link rel="stylesheet" href="/static/css/jquery.jOrgChart.css"/>
+<link rel="stylesheet" href="/static/css/custom.css"/>
+<!--<link href="/static/css/prettify.css" type="text/css" rel="stylesheet"/>-->
+{% endblock %}
+
+
+{% block content %}
+<ul id="stack" style="display:none">
+</ul>
+
+<ul id="org" style="display:none">
+
+</ul>
+
+<div id="chart" class="orgChart"></div>
+
+
+{% endblock %}
+
+{% block js %}
+<!--<script type="text/javascript" src="/static/js/jquery-ui.min.js"></script>-->
+<script src="/static/js/jquery.jOrgChart.js"></script>
+<script type="text/javascript" src="/static/js/prettify.js"></script>
+<script type="text/javascript" src="/static/module/show_organization.js"></script>
+
+
+
+
+<!--<script>-->
+<!--    jQuery(document).ready(function () {-->
+<!--        $("#org").jOrgChart({-->
+<!--            chartElement: '#chart',-->
+<!--            dragAndDrop: true-->
+<!--        });-->
+<!--        prettyPrint();-->
+<!--    });-->
+<!--</script>-->
+<!--<script>-->
+<!--    jQuery(document).ready(function () {-->
+
+<!--        /* Custom jQuery for the example */-->
+<!--        $("#show-list").click(function (e) {-->
+<!--            e.preventDefault();-->
+
+<!--            $('#list-html').toggle('fast', function () {-->
+<!--                if ($(this).is(':visible')) {-->
+<!--                    $('#show-list').text('Hide underlying list.');-->
+<!--                    $(".topbar").fadeTo('fast', 0.9);-->
+<!--                } else {-->
+<!--                    $('#show-list').text('Show underlying list.');-->
+<!--                    $(".topbar").fadeTo('fast', 1);-->
+<!--                }-->
+<!--            });-->
+<!--        });-->
+
+<!--        $('#list-html').text($('#org').html());-->
+
+<!--        $("#org").bind("DOMSubtreeModified", function () {-->
+<!--            $('#list-html').text('');-->
+
+<!--            $('#list-html').text($('#org').html());-->
+
+<!--            prettyPrint();-->
+<!--        });-->
+<!--    });-->
+<!--</script>-->
+{% endblock %}

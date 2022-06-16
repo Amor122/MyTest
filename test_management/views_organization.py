@@ -61,7 +61,6 @@ def get_organization_dict_info(request):
                 data_dict[up_name].append(obj_name)
     print(data_dict)
 
-
     return JsonResponse(data={
         'status': True,
         'message': '成功加载组织数据，正在绘制组织结构图形',
