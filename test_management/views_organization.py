@@ -8,7 +8,7 @@ from human_management.models import Human, Organization, HumanPost
 
 def show_organization(request):
     """欢迎页"""
-    return render(request, 'index2.html', locals())
+    return render(request, 'show_organization.html', locals())
 
 
 def get_organization_info(request):
