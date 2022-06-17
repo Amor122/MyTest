@@ -42,8 +42,11 @@ def get_organization_dict_info(request):
     org_objs = Organization.objects.all()
     # 直接读这个反向查询有问题，所以直接构建新数据
     data_dict = {}
+    start_org = []
     for obj in org_objs:
-        print(obj.down_organization.all())
+        if not obj.up_organization:
+            start_org.append(obj.organization_name)
+        # print(obj.down_organization.all())
         obj: Organization
         obj_name = obj.organization_name
         if obj.up_organization:
@@ -56,7 +59,7 @@ def get_organization_dict_info(request):
             pass
         if up_name:
             if up_name not in data_dict:
-                data_dict.update({up_name:[]})
+                data_dict.update({up_name: []})
             if obj_name not in data_dict[up_name]:
                 data_dict[up_name].append(obj_name)
     print(data_dict)
@@ -65,4 +68,5 @@ def get_organization_dict_info(request):
         'status': True,
         'message': '成功加载组织数据，正在绘制组织结构图形',
         'data_list': data_dict,
+        'start_org': start_org,
     }, safe=False, json_dumps_params={'ensure_ascii': False})

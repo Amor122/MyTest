@@ -1,12 +1,26 @@
 const org_ul = document.getElementById('org')
 //临时存放处，不然后续的document找不到元素
 const temp_ul = document.getElementById('stack')
+
+const start_obj = document.getElementById('start')
 $.ajax({
     url: "/test_management/get_organization_dict_info",//数据请求的地址
     method: "POST",//ajax数据访问的方法
     // data: post_data,
     dataType: "json",//返回数据类型格式
     success: function (data_receive) {
+        let start_org = data_receive.start_org
+        console.log(start_org)
+        if (start_org){
+            start_ul = document.createElement('ul')
+            for(let i in start_org){
+                start_li= document.createElement('li')
+                start_li.id = start_org[i]
+                start_li.innerText = start_org[i]
+                start_ul.append(start_li)
+            }
+            start_obj.append(start_ul)
+        }
         let data_list = data_receive.data_list
         console.log(data_list)
         for (let index in data_list) {
@@ -43,9 +57,6 @@ $.ajax({
                     }
                 }
                 li.append(new_ul)
-            }
-            if (index === '第一中学') {
-                org_ul.append(li)
             }
         }
 
