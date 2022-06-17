@@ -11,6 +11,11 @@ def show_organization(request):
     return render(request, 'show_organization.html', locals())
 
 
+def show_organization2(request):
+    """欢迎页"""
+    return render(request, 'show_organization2.html', locals())
+
+
 def get_organization_info(request):
     """为组织结构图分装数据的视图函数"""
     org_objs = Organization.objects.all()
@@ -29,7 +34,7 @@ def get_organization_info(request):
             'id': org_id,
         }
         data_list.append(data_dict)
-
+    print(data_list)
     return JsonResponse(data={
         'status': True,
         'data_list': data_list,

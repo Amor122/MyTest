@@ -16,6 +16,7 @@ urlpatterns = [
 
     # 组织管理界面示意图
     path('show_organization', views_organization.show_organization),
+    path('show_organization2', views_organization.show_organization2),
     path('get_organization_info', views_organization.get_organization_info),
     path('get_organization_dict_info', views_organization.get_organization_dict_info),
 
