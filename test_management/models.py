@@ -3,7 +3,7 @@ from django.db import models
 from django.conf import settings
 
 import human_management.models
-from human_management.models import HumanCommon
+from human_management.models import HumanCommon, Human, Organization
 
 
 class Question(HumanCommon):
@@ -60,6 +60,17 @@ class Test(HumanCommon):
     test_name = models.CharField(max_length=30, verbose_name='考试名称', unique=True)
     start_time = models.DateTimeField(verbose_name='开考时间')
     duration = models.IntegerField(verbose_name='考试时长', default=150)
+    # 考生信息，有权限才能参加考试，不是吗
+    test_examinee = models.ManyToManyField(Human, db_table='test_examinee', related_name='student_tests',
+                                           verbose_name='考试考生关联信息', null=True)
+    # 组织信息用于在配置时将整个组的人加到考试里，组织的退出和加入都会涉及到整个组织的人员的变动。处理逻辑会处理组织的类型问题，以便不把老师加到考试里。
+    # 或者就是想把老师加到考试里，不做特别处理也行
+    test_organization = models.ManyToManyField(Organization, db_table='test_organization',
+                                               related_name='organization_tests',
+                                               verbose_name='考试组织关联信息', null=True)
+    # 监考人信息
+    # test_invigilator = models.ManyToManyField(Human, db_table='test_invigilator', related_name='invigilate_tests',
+    #                                           verbose_name='考试监考人信息', null=True)
 
     def __str__(self):
         return self.test_name
@@ -71,6 +82,7 @@ class Invigilator(HumanCommon):
         verbose_name = verbose_name_plural = '监考信息'
 
     test = models.ForeignKey(Test, on_delete=models.CASCADE, verbose_name='考试')
+    location = models.CharField(max_length=30, verbose_name='监考地点')
     invigilator = models.ForeignKey(human_management.models.Human, on_delete=models.CASCADE, verbose_name='监考人')
 
 
