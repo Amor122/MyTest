@@ -2,74 +2,147 @@
 
 
 {% block title %}
-组织管理
+    组织管理
 {% endblock %}
 
 {% block css %}
-<link rel="stylesheet" href="/static/css/jquery.jOrgChart.css"/>
-<link rel="stylesheet" href="/static/css/custom.css"/>
-<!--<link href="/static/css/prettify.css" type="text/css" rel="stylesheet"/>-->
+    <link rel="stylesheet" href="/static/css/jquery.jOrgChart.css"/>
+    <link rel="stylesheet" href="/static/css/custom.css"/>
+    <!--<link href="/static/css/prettify.css" type="text/css" rel="stylesheet"/>-->
 {% endblock %}
 
 
 {% block content %}
-<ul id="stack" style="display:none">
-</ul>
+    <div >
+            <button class="btn btn-danger btn-sm" id="table_add_button" style="margin-top: 10px;margin-left: 5px">新增组织</button>
+    </div>
+    <ul id="stack" style="display:none">
+    </ul>
 
-<ul id="org" style="display:none">
-    <li id="start">--组织架构--</li>
-</ul>
+    <ul id="org" style="display:none">
+        <li id="start">--组织架构--</li>
+    </ul>
 
-<div id="chart" class="orgChart"></div>
+    <div id="chart" class="orgChart"></div>
 
+    <!--双击编辑框-->
+    <div class="modal fade" id="double_click_edit" tabindex="-1" role="dialog" aria-labelledby="my_title_label"
+         aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title" id="my_title_label">编辑组织信息</h4>
+                </div>
+                <div class="modal-body" align="center">
+                    <div class="form-group" style="margin-bottom: 5px;display: none">
+                        <label for="organization_id">组织编号</label>&nbsp;&nbsp;
+                        <input type="text" name="organization_id" id="organization_id" class="form-group" disabled>
+                    </div>
+                    <div class="form-group" style="margin-bottom: 5px">
+                        <label for="organization_name">组织名称</label>&nbsp;&nbsp;
+                        <input type="text" name="organization_name" id="organization_name" class="form-group"
+                               style="width: 227px">
+                    </div>
+                    <div class="form-group" style="margin-bottom: 5px">
+                        <label for="organization_type">组织类型</label>&nbsp;&nbsp;
+                        <select name="organization_type" id="organization_type" style="width: 227px"></select>
+                    </div>
+                    <div class="form-group" style="margin-bottom: 5px">
+                        <label for="up_organization">上级组织</label>&nbsp;&nbsp;
+                        <select name="up_organization" id="up_organization" style="width: 227px"></select>
+                    </div>
 
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-danger" onclick="delete_organization()">删除</button>
+                    <button type="button" class="btn btn-primary" onclick="edit_organization()">修改</button>
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+    <!--新增按钮框-->
+    <div class="modal fade" id="add_organization_button" tabindex="-1" role="dialog" aria-labelledby="my_add_label"
+         aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title" id="my_add_label">新增组织信息</h4>
+                </div>
+                <div class="modal-body" align="center">
+                    <div class="form-group" style="margin-bottom: 5px">
+                        <label for="organization_name_add">组织名称</label>&nbsp;&nbsp;
+                        <input type="text" name="organization_name_add" id="organization_name_add" class="form-group"
+                               style="width: 227px">
+                    </div>
+                    <div class="form-group" style="margin-bottom: 5px">
+                        <label for="organization_type_add">组织类型</label>&nbsp;&nbsp;
+                        <select name="organization_type_add" id="organization_type_add" style="width: 227px"></select>
+                    </div>
+                    <div class="form-group" style="margin-bottom: 5px">
+                        <label for="up_organization_add">上级组织</label>&nbsp;&nbsp;
+                        <select name="up_organization_add" id="up_organization_add" style="width: 227px"></select>
+                    </div>
+
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-primary" onclick="add_organization()">增加</button>
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
 {% endblock %}
 
 {% block js %}
-<!--<script type="text/javascript" src="/static/js/jquery-ui.min.js"></script>-->
-<script src="/static/js/jquery.jOrgChart.js"></script>
-<script type="text/javascript" src="/static/js/prettify.js"></script>
-<script type="text/javascript" src="/static/module/show_organization.js"></script>
+    <!--<script type="text/javascript" src="/static/js/jquery-ui.min.js"></script>-->
+    <script src="/static/js/jquery.jOrgChart.js"></script>
+    <script type="text/javascript" src="/static/js/prettify.js"></script>
+    <script type="text/javascript" src="/static/module/show_organization.js"></script>
 
 
 
 
-<!--<script>-->
-<!--    jQuery(document).ready(function () {-->
-<!--        $("#org").jOrgChart({-->
-<!--            chartElement: '#chart',-->
-<!--            dragAndDrop: true-->
-<!--        });-->
-<!--        prettyPrint();-->
-<!--    });-->
-<!--</script>-->
-<!--<script>-->
-<!--    jQuery(document).ready(function () {-->
+    <!--<script>-->
+    <!--    jQuery(document).ready(function () {-->
+    <!--        $("#org").jOrgChart({-->
+    <!--            chartElement: '#chart',-->
+    <!--            dragAndDrop: true-->
+    <!--        });-->
+    <!--        prettyPrint();-->
+    <!--    });-->
+    <!--</script>-->
+    <!--<script>-->
+    <!--    jQuery(document).ready(function () {-->
 
-<!--        /* Custom jQuery for the example */-->
-<!--        $("#show-list").click(function (e) {-->
-<!--            e.preventDefault();-->
+    <!--        /* Custom jQuery for the example */-->
+    <!--        $("#show-list").click(function (e) {-->
+    <!--            e.preventDefault();-->
 
-<!--            $('#list-html').toggle('fast', function () {-->
-<!--                if ($(this).is(':visible')) {-->
-<!--                    $('#show-list').text('Hide underlying list.');-->
-<!--                    $(".topbar").fadeTo('fast', 0.9);-->
-<!--                } else {-->
-<!--                    $('#show-list').text('Show underlying list.');-->
-<!--                    $(".topbar").fadeTo('fast', 1);-->
-<!--                }-->
-<!--            });-->
-<!--        });-->
+    <!--            $('#list-html').toggle('fast', function () {-->
+    <!--                if ($(this).is(':visible')) {-->
+    <!--                    $('#show-list').text('Hide underlying list.');-->
+    <!--                    $(".topbar").fadeTo('fast', 0.9);-->
+    <!--                } else {-->
+    <!--                    $('#show-list').text('Show underlying list.');-->
+    <!--                    $(".topbar").fadeTo('fast', 1);-->
+    <!--                }-->
+    <!--            });-->
+    <!--        });-->
 
-<!--        $('#list-html').text($('#org').html());-->
+    <!--        $('#list-html').text($('#org').html());-->
 
-<!--        $("#org").bind("DOMSubtreeModified", function () {-->
-<!--            $('#list-html').text('');-->
+    <!--        $("#org").bind("DOMSubtreeModified", function () {-->
+    <!--            $('#list-html').text('');-->
 
-<!--            $('#list-html').text($('#org').html());-->
+    <!--            $('#list-html').text($('#org').html());-->
 
-<!--            prettyPrint();-->
-<!--        });-->
-<!--    });-->
-<!--</script>-->
+    <!--            prettyPrint();-->
+    <!--        });-->
+    <!--    });-->
+    <!--</script>-->
 {% endblock %}
