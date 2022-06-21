@@ -1,5 +1,5 @@
 from django.urls import path
-from . import views, views_organization
+from . import views, views_organization, views_test
 
 app_name = 'test_management'
 urlpatterns = [
@@ -25,5 +25,11 @@ urlpatterns = [
     path('edit_organization_by_id', views_organization.edit_organization_by_id),
     path('add_organization', views_organization.add_organization),
     path('get_organization_types', views_organization.get_organization_types),
+
+    # 考试安排界面
+    path('get_test', views_test.get_test),
+    path('show_test', views_test.show_test),
+    path('get_test_selections', views_test.get_test_selections),
+
 
 ]

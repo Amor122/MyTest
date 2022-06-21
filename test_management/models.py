@@ -60,6 +60,8 @@ class Test(HumanCommon):
     test_name = models.CharField(max_length=30, verbose_name='考试名称', unique=True)
     start_time = models.DateTimeField(verbose_name='开考时间')
     duration = models.IntegerField(verbose_name='考试时长', default=150)
+    # 考试的删除涉及过多，不建议直接去除数据，这里将它的状态标识为删除，我们在查看时不再显示
+    delete_status = models.BooleanField(verbose_name='删除状态',default=False)
     # 考生信息，有权限才能参加考试，不是吗
     test_examinee = models.ManyToManyField(Human, db_table='test_examinee', related_name='student_tests',
                                            verbose_name='考试考生关联信息', null=True)
