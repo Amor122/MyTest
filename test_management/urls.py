@@ -30,6 +30,9 @@ urlpatterns = [
     path('get_test', views_test.get_test),
     path('show_test', views_test.show_test),
     path('get_test_selections', views_test.get_test_selections),
+    path('edit_test_by_id', views_test.edit_test_by_id),
+    path('add_test', views_test.add_test),
+    path('delete_test_by_id', views_test.delete_test_by_id),
 
 
 ]

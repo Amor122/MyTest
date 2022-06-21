@@ -66,7 +66,7 @@ function initTable() {
                 align: 'center',
                 valign: 'middle',
                 formatter: function (value, item, index) {
-                    return value+':00'
+                    return value + ':00'
 
                 }
             }, {
@@ -86,7 +86,7 @@ function initTable() {
                         $('#test_name').val(row.test_name);
                         $('#difficulty').empty()
                         $('#subject').empty()
-                        $('#start_time').val(row.start_time.replaceAll(' ','T'))
+                        $('#start_time').val(row.start_time.replaceAll(' ', 'T'))
                         $('#duration').val(row.duration);
 
                         $.ajax({
@@ -161,12 +161,10 @@ function edit_submit() {
         'subject': $('#subject').val(),
         'start_time': $('#start_time').val(),
         'duration': $('#duration').val(),
-
     }
     console.log(form_data)
-    return 0
     $.ajax({
-        url: "/test_management/edit_human",//数据请求的地址
+        url: "/test_management/edit_test_by_id",//数据请求的地址
         method: "POST",//ajax数据访问的方法
         // timeout: 30,
         data: form_data,
@@ -176,14 +174,10 @@ function edit_submit() {
                 toastr.success('修改成功')
                 $('#table_edit').modal('hide')
                 $table.bootstrapTable('refresh');
-
             } else {
-                toastr.error('修改失败，可能是重复的账号！')
+                toastr.error('修改失败！')
                 $table.bootstrapTable('refresh');
-
             }
-
-
         },
         error: function (data_receive) {
             toastr.error('数据提交失败，请刷新后再试')
@@ -199,61 +193,49 @@ function edit_submit() {
 }
 
 $('#table_add_button').click(function () {
-    $('#user_id_add').empty()
-    $('#user_name_add').empty()
+    $('#difficulty_add').empty()
+    $('#subject_add').empty()
     $.ajax({
-        url: "/test_management/get_organizations",//数据请求的地址
+        url: "/test_management/get_test_selections",//数据请求的地址
         method: "POST",//ajax数据访问的方法
         dataType: "json",//s数据类型格式
         success: function (data_receive) {
-            let organization_list = data_receive.organization_list
-            for (let org in organization_list) {
-                $('#organization_add').append("<option value='" + organization_list[org] + "'>" + organization_list[org] + "</option>")
-
+            let difficulties = data_receive.difficulties
+            for (let index in difficulties) {
+                $('#difficulty_add').append("<option value='" + difficulties[index] + "'>" + difficulties[index] + "</option>")
+            }
+            let subjects = data_receive.subjects
+            for (let index in subjects) {
+                $('#subject_add').append("<option value='" + subjects[index] + "'>" + subjects[index] + "</option>")
             }
 
         },
         error: function () {
-            toastr.error('组织数据获取失败，请刷新后再试')
-
-        }
-    })
-    $.ajax({
-        url: "/test_management/get_posts",//数据请求的地址
-        method: "POST",//ajax数据访问的方法
-        dataType: "json",//s数据类型格式
-        success: function (data_receive) {
-            let post_list = data_receive.post_list
-            for (let pos in post_list) {
-                $('#post_add').append("<option value='" + post_list[pos] + "'>" + post_list[pos] + "</option>")
-            }
-        },
-        error: function () {
-            toastr.error('职位数据获取失败，请刷新后再试')
-
+            toastr.error('下拉框数据获取失败，请刷新后再试')
         }
 
     })
-
     $('#table_add').modal('show')
 })
 
 $('#table_add_submit').click(function () {
-    let user_id = $('#user_id_add').val()
-    let user_name = $('#user_name_add').val()
-    let organization = $('#organization_add').val()
-    let post = $('#post_add').val()
-    if (!user_id || !user_name) {
+    let test_name_add = $('#test_name_add').val()
+    let difficulty_add = $('#difficulty_add').val()
+    let subject_add = $('#subject_add').val()
+    let start_time_add = $('#start_time_add').val()
+    let duration_add = $('#duration_add').val()
+    if (!test_name_add || !difficulty_add || !subject_add || !start_time_add || !duration_add) {
         toastr.warning("参数不全")
     } else {
         let post_data = {
-            'user_id': user_id,
-            'user_name': user_name,
-            'organization': organization,
-            'post': post
+            'test_name_add': test_name_add,
+            'difficulty_add': difficulty_add,
+            'subject_add': subject_add,
+            'start_time_add': start_time_add,
+            'duration_add': duration_add,
         }
         $.ajax({
-            url: "/test_management/add_human",//数据请求的地址
+            url: "/test_management/add_test",//数据请求的地址
             method: "POST",//ajax数据访问的方法
             data: post_data,
             dataType: "json",//s数据类型格式
@@ -267,7 +249,7 @@ $('#table_add_submit').click(function () {
                     if (data_receive.message) {
                         toastr.error(data_receive.message)
                     } else {
-                        toastr.error('修改失败，可能是重复的账号！')
+                        toastr.error('修改失败，可能是重复的！')
                     }
                     $table.bootstrapTable('refresh');
 

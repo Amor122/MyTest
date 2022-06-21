@@ -72,22 +72,28 @@
                 <h4 class="modal-title" id="my_title_label_add">新增信息</h4>
             </div>
             <div class="modal-body" align="center">
-                <div class="form-group" style="margin-bottom: 5px">
-                    <label for="user_id_add">账号</label>&nbsp;&nbsp;
-                    <input type="text" id="user_id_add" class="form-group" width="300px" required>
+                <div class="form-group" style="margin-bottom: 5px;">
+                    <label for="test_name_add">考试名称</label>&nbsp;&nbsp;
+                    <input type="text" id="test_name_add" class="form-group" style="width: 260px">
+                </div>
+                <div class="form-group" style="margin-bottom: 5px;">
+                    <label for="difficulty_add">分级难度</label>&nbsp;&nbsp;
+                    <select id="difficulty_add" style="width: 260px"></select>
                 </div>
                 <div class="form-group" style="margin-bottom: 5px">
-                    <label for="user_name_add">姓名</label>&nbsp;&nbsp;
-                    <input type="text" id="user_name_add" class="form-group" width="300px" required>
+                    <label for="subject_add">关联科目</label>&nbsp;&nbsp;
+                    <select id="subject_add" style="width: 260px"></select>
+                </div>
+
+                <div class="form-group" style="margin-bottom: 5px">
+                    <label for="start_time_add">开考时间</label>&nbsp;&nbsp;
+                    <input type="datetime-local" id="start_time_add" class="form-group" style="width: 260px">
                 </div>
                 <div class="form-group" style="margin-bottom: 5px">
-                    <label for="organization_add">组织</label>&nbsp;&nbsp;
-                    <select name="organization" id="organization_add" style="width: 227px"></select>
+                    <label for="duration_add">持续时长</label>&nbsp;&nbsp;
+                    <input type="number" min="0" id="duration_add" class="form-group" style="width: 260px">
                 </div>
-                <div class="form-group" style="margin-bottom: 5px">
-                    <label for="post_add">职位</label>&nbsp;&nbsp;
-                    <select name="post" id="post_add" style="width: 227px"></select>
-                </div>
+
             </div>
             <div class="modal-footer">
                 <button type="button" id="table_add_submit" class="btn btn-primary">修改</button>
