@@ -34,5 +34,13 @@ urlpatterns = [
     path('add_test', views_test.add_test),
     path('delete_test_by_id', views_test.delete_test_by_id),
 
+# 2312
+# 12321
+#12312
+    # 132
+    # 13213
+    # 212122、
+    # wddw
+    #多对多
 
 ]
