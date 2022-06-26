@@ -25,6 +25,7 @@ urlpatterns = [
     path('edit_organization_by_id', views_organization.edit_organization_by_id),
     path('add_organization', views_organization.add_organization),
     path('get_organization_types', views_organization.get_organization_types),
+    path('get_organization_tree', views_organization.get_organization_tree),
 
     # 考试安排界面
     path('get_test', views_test.get_test),
@@ -33,14 +34,5 @@ urlpatterns = [
     path('edit_test_by_id', views_test.edit_test_by_id),
     path('add_test', views_test.add_test),
     path('delete_test_by_id', views_test.delete_test_by_id),
-
-# 2312
-# 12321
-#12312
-    # 132
-    # 13213
-    # 212122、
-    # wddw
-    #多对多
 
 ]

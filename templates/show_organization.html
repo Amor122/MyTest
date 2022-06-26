@@ -8,14 +8,32 @@
 {% block css %}
     <link rel="stylesheet" href="/static/css/jquery.jOrgChart.css"/>
     <link rel="stylesheet" href="/static/css/custom.css"/>
+    <link rel="stylesheet" href="/static/ztree/css/zTreeStyle/zTreeStyle.css"/>
+
     <!--<link href="/static/css/prettify.css" type="text/css" rel="stylesheet"/>-->
 {% endblock %}
 
 
 {% block content %}
-    <div >
-            <button class="btn btn-danger btn-sm" id="table_add_button" style="margin-top: 10px;margin-left: 5px">新增组织</button>
+    <div>
+        <button class="btn btn-danger btn-sm" id="table_add_button" style="margin-top: 10px;margin-left: 5px">新增组织
+        </button>
     </div>
+    <table style="margin-top: 20px">
+        <tr>
+            <td style="vertical-align: top;width: 250px;">
+                <div>
+                    <ul id="myZTree" class="ztree"></ul>
+                </div>
+            </td>
+            <td style="vertical-align: top">
+                <div id="chart" class="orgChart"></div>
+
+            </td>
+        </tr>
+    </table>
+
+
     <ul id="stack" style="display:none">
     </ul>
 
@@ -23,7 +41,6 @@
         <li id="start">--组织架构--</li>
     </ul>
 
-    <div id="chart" class="orgChart"></div>
 
     <!--双击编辑框-->
     <div class="modal fade" id="double_click_edit" tabindex="-1" role="dialog" aria-labelledby="my_title_label"
@@ -99,50 +116,10 @@
 {% endblock %}
 
 {% block js %}
-    <!--<script type="text/javascript" src="/static/js/jquery-ui.min.js"></script>-->
     <script src="/static/js/jquery.jOrgChart.js"></script>
+    <script src="/static/ztree/js/jquery.ztree.all.min.js"></script>
     <script type="text/javascript" src="/static/js/prettify.js"></script>
+    <script type="text/javascript" src="/static/module/show_organization_tree.js"></script>
     <script type="text/javascript" src="/static/module/show_organization.js"></script>
 
-
-
-
-    <!--<script>-->
-    <!--    jQuery(document).ready(function () {-->
-    <!--        $("#org").jOrgChart({-->
-    <!--            chartElement: '#chart',-->
-    <!--            dragAndDrop: true-->
-    <!--        });-->
-    <!--        prettyPrint();-->
-    <!--    });-->
-    <!--</script>-->
-    <!--<script>-->
-    <!--    jQuery(document).ready(function () {-->
-
-    <!--        /* Custom jQuery for the example */-->
-    <!--        $("#show-list").click(function (e) {-->
-    <!--            e.preventDefault();-->
-
-    <!--            $('#list-html').toggle('fast', function () {-->
-    <!--                if ($(this).is(':visible')) {-->
-    <!--                    $('#show-list').text('Hide underlying list.');-->
-    <!--                    $(".topbar").fadeTo('fast', 0.9);-->
-    <!--                } else {-->
-    <!--                    $('#show-list').text('Show underlying list.');-->
-    <!--                    $(".topbar").fadeTo('fast', 1);-->
-    <!--                }-->
-    <!--            });-->
-    <!--        });-->
-
-    <!--        $('#list-html').text($('#org').html());-->
-
-    <!--        $("#org").bind("DOMSubtreeModified", function () {-->
-    <!--            $('#list-html').text('');-->
-
-    <!--            $('#list-html').text($('#org').html());-->
-
-    <!--            prettyPrint();-->
-    <!--        });-->
-    <!--    });-->
-    <!--</script>-->
 {% endblock %}

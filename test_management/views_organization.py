@@ -213,3 +213,28 @@ def get_organization_types(requests):
     return JsonResponse(data={
         'organization_type_list': organization_type_list
     }, safe=False, json_dumps_params={'ensure_ascii': False})
+
+
+def get_organization_tree(requests):
+    organization_objs = Organization.objects.all()
+    data_list = []
+    for organization_obj in organization_objs:
+        organization_obj: Organization
+        if organization_obj.up_organization:
+            pid = organization_obj.up_organization.organization_name
+        else:
+            pid = 0
+        org_name = organization_obj.organization_name
+        # 树目录的开启状态
+        open_status = False if pid else True
+        data_dict = {
+            'id': org_name,
+            'pId': pid,
+            'name':org_name,
+            'open': open_status
+        }
+        data_list.append(data_dict)
+
+    return JsonResponse(data={
+        'data_list': data_list
+    }, safe=False, json_dumps_params={'ensure_ascii': False})
