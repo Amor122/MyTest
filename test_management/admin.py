@@ -49,8 +49,8 @@ class TestModelAdmin(admin.ModelAdmin):
 
 @admin.register(models.Invigilator)
 class InvigilatorModelAdmin(admin.ModelAdmin):
-    list_display = ('test', 'invigilator')
-    fields = ('test', 'invigilator')
+    list_display = ('test', 'invigilator','location')
+    fields = ('test', 'invigilator','location')
     list_per_page = 10
 
 

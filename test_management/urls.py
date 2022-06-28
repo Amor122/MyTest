@@ -34,5 +34,6 @@ urlpatterns = [
     path('edit_test_by_id', views_test.edit_test_by_id),
     path('add_test', views_test.add_test),
     path('delete_test_by_id', views_test.delete_test_by_id),
+    path('get_people/<test_id>/', views_test.get_people),
 
 ]

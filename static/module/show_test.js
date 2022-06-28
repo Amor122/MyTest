@@ -1,4 +1,5 @@
 var $table = $('#my_table');
+var $people_table = $('#people_table');
 
 $(document).ready(function () {
     initTable();
@@ -124,6 +125,22 @@ function initTable() {
                 formatter: function (value, item, index) {
                     return "<button id='edit' class='btn btn-info btn-sm'  data-toggle='modal' data-target='#table_edit'>编辑</button>" +
                         '<button style="margin-left: 5px" class="btn btn-danger btn-sm" onclick=" if( confirm(\'确认删除该考试\') ) delete_test(\'' + item.id + '\')">删除</button>'
+                }
+
+            },{
+                title: '配置',
+                field: 'setting',
+                align: 'center',
+                valign: 'middle',
+                events: {
+                    'click #peopleSet': function (e, value, row, index) {
+                        $('#table_people').modal('show')
+                        initPeopleTable(row.id)
+
+                    }
+                },
+                formatter: function (value, item, index) {
+                    return "<button id='peopleSet' class='btn btn-info btn-sm'  data-toggle='modal' data-target='#table_edit'>监考人</button>"
                 }
 
             },
@@ -302,4 +319,106 @@ function delete_test(id) {
         }
 
     })
+}
+
+
+function initPeopleTable(test_id) {
+    $people_table.bootstrapTable({
+        url: '/test_management/get_people/'+test_id,
+        method: 'get',      //请求方式（*）
+        toolbar: '#modal_toolbar',    //工具按钮用哪个容器
+        striped: true,      //是否显示行间隔色
+        cache: false,      //是否使用缓存，默认为true，所以一般情况下需要设置一下这个属性（*）
+        pagination: true,     //是否显示分页（*）
+        sortable: true,      //是否启用排序
+        sortOrder: "asc",     //排序方式
+        // queryParams: queryParams, //传递参数（*）
+        sidePagination: "client",   //分页方式：client客户端分页，server服务端分页（*）
+        pageSize: 50,
+        pageList: [10, 25, 50, 100, 'ALL'],  //可供选择的每页的行数（*）
+        search: true,      //是否显示表格搜索，此搜索是客户端搜索，不会进服务端，所以，个人感觉意义不大
+        showColumns: true,     //是否显示所有的列
+        minimumCountColumns: 2,    //最少允许的列数
+        clickToSelect: false,    //是否启用点击选中行
+        // height: 800,      //行高，如果没有设置height属性，表格自动根据记录条数觉得表格高度
+        uniqueId: "id",      //每一行的唯一标识，一般为主键列
+        showToggle: false,     //是否显示详细视图和列表视图的切换按钮
+        cardView: false,     //是否显示详细视图
+        detailView: false,     //是否显示父子表
+        // iconSize: 'outline',
+        columns: [
+            {
+                title: '监考人工号',
+                sortable: true,
+                field: 'invigilator_id',
+                align: 'center',
+                valign: 'middle'
+            }, {
+                title: '监考人姓名',
+                sortable: true,
+                searchable: true,
+                field: 'invigilator_name',
+                align: 'center',
+                valign: 'middle',
+            }, {
+                title: '所在考场',
+                searchable: true,
+                field: 'location',
+                align: 'center',
+                valign: 'middle',
+            },{
+                title: '基本操作',
+                field: 'edit',
+                align: 'center',
+                valign: 'middle',
+                events: {
+                    'click #edit': function (e, value, row, index) {
+                        $('#test_id').val(row.id);
+                        $('#test_name').val(row.test_name);
+                        $('#difficulty').empty()
+                        $('#subject').empty()
+                        $('#start_time').val(row.start_time.replaceAll(' ', 'T'))
+                        $('#duration').val(row.duration);
+
+                        $.ajax({
+                            url: "/test_management/get_test_selections",//数据请求的地址
+                            method: "POST",//ajax数据访问的方法
+                            dataType: "json",//s数据类型格式
+                            success: function (data_receive) {
+                                let difficulties = data_receive.difficulties
+                                for (let index in difficulties) {
+                                    if (difficulties[index] === row.difficulty) {
+                                        $('#difficulty').append("<option selected value='" + difficulties[index] + "'>" + difficulties[index] + "</option>")
+                                    } else {
+                                        $('#difficulty').append("<option value='" + difficulties[index] + "'>" + difficulties[index] + "</option>")
+                                    }
+                                }
+                                let subjects = data_receive.subjects
+                                for (let index in subjects) {
+                                    if (subjects[index] === row.subject) {
+                                        $('#subject').append("<option selected value='" + subjects[index] + "'>" + subjects[index] + "</option>")
+                                    } else {
+                                        $('#subject').append("<option value='" + subjects[index] + "'>" + subjects[index] + "</option>")
+                                    }
+                                }
+
+                            },
+                            error: function () {
+                                toastr.error('下拉框数据获取失败，请刷新后再试')
+
+                            }
+
+                        })
+                        $('#table_edit').modal('show')
+                    }
+                },
+                formatter: function (value, item, index) {
+                    return "<button id='edit' class='btn btn-info btn-sm'  data-toggle='modal' data-target='#table_edit'>编辑</button>" +
+                        '<button style="margin-left: 5px" class="btn btn-danger btn-sm" onclick=" if( confirm(\'确认删除该考试\') ) delete_test(\'' + item.id + '\')">删除</button>'
+                }
+
+            },
+
+        ]
+    });
 }

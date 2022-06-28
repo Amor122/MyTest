@@ -2,7 +2,7 @@
 
 
 {% block title %}
-考试安排
+    考试安排
 {% endblock %}
 
 {% block css %}
@@ -10,105 +10,125 @@
 {% endblock %}
 
 {% block content %}
-<div class="container">
-    <div id="toolbar" class="btn-group">
-        <div >
-            <button class="btn btn-danger" id="table_add_button">新增</button>
+    <div class="container">
+        <div id="toolbar" class="btn-group">
+            <div>
+                <button class="btn btn-danger" id="table_add_button">新增</button>
+            </div>
         </div>
-    </div>
-    <table id="my_table" class="table table-striped">
-    </table>
-</div>
-
-<!--表内编辑框-->
-<div class="modal fade" id="table_edit" tabindex="-1" role="dialog" aria-labelledby="my_title_label" aria-hidden="true">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h4 class="modal-title" id="my_title_label">编辑信息</h4>
-            </div>
-            <div class="modal-body" align="center">
-                <div class="form-group" style="margin-bottom: 5px;display: none">
-                    <label for="test_id">编号</label>&nbsp;&nbsp;
-                    <input type="text" id="test_id" class="form-group" disabled width="300px">
-                </div>
-                <div class="form-group" style="margin-bottom: 5px;">
-                    <label for="test_name">考试名称</label>&nbsp;&nbsp;
-                    <input type="text" id="test_name" class="form-group" style="width: 260px">
-                </div>
-                <div class="form-group" style="margin-bottom: 5px;">
-                    <label for="difficulty">分级难度</label>&nbsp;&nbsp;
-                    <select id="difficulty" style="width: 260px"></select>
-                </div>
-                <div class="form-group" style="margin-bottom: 5px">
-                    <label for="subject">关联科目</label>&nbsp;&nbsp;
-                    <select id="subject" style="width: 260px"></select>
-                </div>
-
-                <div class="form-group" style="margin-bottom: 5px">
-                    <label for="start_time">开考时间</label>&nbsp;&nbsp;
-                    <input type="datetime-local" id="start_time" class="form-group" style="width: 260px">
-                </div>
-                <div class="form-group" style="margin-bottom: 5px">
-                    <label for="duration">持续时长</label>&nbsp;&nbsp;
-                    <input type="number" min="0" id="duration" class="form-group" style="width: 260px">
-                </div>
-
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-primary" onclick="edit_submit()">修改</button>
-            </div>
-
-        </div>
-
+        <table id="my_table" class="table table-striped">
+        </table>
     </div>
 
-</div>
-<!--顶部新增按钮-->
-<div class="modal fade" id="table_add" tabindex="-1" role="dialog" aria-labelledby="my_title_label" aria-hidden="true">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h4 class="modal-title" id="my_title_label_add">新增信息</h4>
-            </div>
-            <div class="modal-body" align="center">
-                <div class="form-group" style="margin-bottom: 5px;">
-                    <label for="test_name_add">考试名称</label>&nbsp;&nbsp;
-                    <input type="text" id="test_name_add" class="form-group" style="width: 260px">
+    <!--表内编辑框-->
+    <div class="modal fade" id="table_edit" tabindex="-1" role="dialog" aria-labelledby="my_title_label"
+         aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title" id="my_title_label">编辑信息</h4>
                 </div>
-                <div class="form-group" style="margin-bottom: 5px;">
-                    <label for="difficulty_add">分级难度</label>&nbsp;&nbsp;
-                    <select id="difficulty_add" style="width: 260px"></select>
+                <div class="modal-body" align="center">
+                    <div class="form-group" style="margin-bottom: 5px;display: none">
+                        <label for="test_id">编号</label>&nbsp;&nbsp;
+                        <input type="text" id="test_id" class="form-group" disabled width="300px">
+                    </div>
+                    <div class="form-group" style="margin-bottom: 5px;">
+                        <label for="test_name">考试名称</label>&nbsp;&nbsp;
+                        <input type="text" id="test_name" class="form-group" style="width: 260px">
+                    </div>
+                    <div class="form-group" style="margin-bottom: 5px;">
+                        <label for="difficulty">分级难度</label>&nbsp;&nbsp;
+                        <select id="difficulty" style="width: 260px"></select>
+                    </div>
+                    <div class="form-group" style="margin-bottom: 5px">
+                        <label for="subject">关联科目</label>&nbsp;&nbsp;
+                        <select id="subject" style="width: 260px"></select>
+                    </div>
+
+                    <div class="form-group" style="margin-bottom: 5px">
+                        <label for="start_time">开考时间</label>&nbsp;&nbsp;
+                        <input type="datetime-local" id="start_time" class="form-group" style="width: 260px">
+                    </div>
+                    <div class="form-group" style="margin-bottom: 5px">
+                        <label for="duration">持续时长</label>&nbsp;&nbsp;
+                        <input type="number" min="0" id="duration" class="form-group" style="width: 260px">
+                    </div>
+
                 </div>
-                <div class="form-group" style="margin-bottom: 5px">
-                    <label for="subject_add">关联科目</label>&nbsp;&nbsp;
-                    <select id="subject_add" style="width: 260px"></select>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-primary" onclick="edit_submit()">修改</button>
                 </div>
 
-                <div class="form-group" style="margin-bottom: 5px">
-                    <label for="start_time_add">开考时间</label>&nbsp;&nbsp;
-                    <input type="datetime-local" id="start_time_add" class="form-group" style="width: 260px">
-                </div>
-                <div class="form-group" style="margin-bottom: 5px">
-                    <label for="duration_add">持续时长</label>&nbsp;&nbsp;
-                    <input type="number" min="0" id="duration_add" class="form-group" style="width: 260px">
-                </div>
-
-            </div>
-            <div class="modal-footer">
-                <button type="button" id="table_add_submit" class="btn btn-primary">修改</button>
             </div>
 
         </div>
 
     </div>
+    <!--顶部新增按钮-->
+    <div class="modal fade" id="table_add" tabindex="-1" role="dialog" aria-labelledby="my_title_label"
+         aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title" id="my_title_label_add">新增信息</h4>
+                </div>
+                <div class="modal-body" align="center">
+                    <div class="form-group" style="margin-bottom: 5px;">
+                        <label for="test_name_add">考试名称</label>&nbsp;&nbsp;
+                        <input type="text" id="test_name_add" class="form-group" style="width: 260px">
+                    </div>
+                    <div class="form-group" style="margin-bottom: 5px;">
+                        <label for="difficulty_add">分级难度</label>&nbsp;&nbsp;
+                        <select id="difficulty_add" style="width: 260px"></select>
+                    </div>
+                    <div class="form-group" style="margin-bottom: 5px">
+                        <label for="subject_add">关联科目</label>&nbsp;&nbsp;
+                        <select id="subject_add" style="width: 260px"></select>
+                    </div>
 
-</div>
+                    <div class="form-group" style="margin-bottom: 5px">
+                        <label for="start_time_add">开考时间</label>&nbsp;&nbsp;
+                        <input type="datetime-local" id="start_time_add" class="form-group" style="width: 260px">
+                    </div>
+                    <div class="form-group" style="margin-bottom: 5px">
+                        <label for="duration_add">持续时长</label>&nbsp;&nbsp;
+                        <input type="number" min="0" id="duration_add" class="form-group" style="width: 260px">
+                    </div>
 
+                </div>
+                <div class="modal-footer">
+                    <button type="button" id="table_add_submit" class="btn btn-primary">修改</button>
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+    <!--配置监考人员表格-->
+    <div class="modal fade bs-example-modal-lg" id="table_people" tabindex="-1" role="dialog"
+         aria-labelledby="my_title_label" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title" id="my_title_label">监考人配置</h4>
+                </div>
+                <div class="modal-body" align="center">
+                    <div id="modal_toolbar" class="btn-group">
+                        <div>
+                            <button class="btn btn-danger" id="modal_add_button">新增</button>
+                        </div>
+                    </div>
+                    <table id="people_table" class="table "></table>
+                </div>
+            </div>
+        </div>
+    </div>
 
 {% endblock %}
 
 {% block js %}
-<script src='/static/module/show_test.js'></script>
+    <script src='/static/module/show_test.js'></script>
 
 {% endblock %}

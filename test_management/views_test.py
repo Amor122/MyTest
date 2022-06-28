@@ -5,7 +5,7 @@ from django.http import JsonResponse, HttpRequest
 from django.shortcuts import render
 
 from human_management.models import Human, Organization, HumanPost, OrganizationType
-from .models import Test, Difficulty, Subject
+from .models import Test, Difficulty, Subject, Invigilator
 
 
 def show_test(request):
@@ -146,3 +146,21 @@ def add_test(request):
         'status': False,
         'message': f'数据加载错误',
     }, safe=False, json_dumps_params={'ensure_ascii': False})
+
+
+def get_people(request,test_id):
+    """监考人信息"""
+    invigilator_objs = Invigilator.objects.all().filter(test__id=test_id)
+    data_list = []
+    for obj in invigilator_objs:
+        obj: Invigilator
+        data_dict = {
+            'id': obj.id,
+            'test_id': obj.test.id,
+            'invigilator_id': obj.invigilator.user_id,
+            'invigilator_name': obj.invigilator.user_name,
+            'location': obj.location,
+        }
+        data_list.append(data_dict)
+    print(data_list)
+    return JsonResponse(data=data_list, safe=False, json_dumps_params={'ensure_ascii': False})
